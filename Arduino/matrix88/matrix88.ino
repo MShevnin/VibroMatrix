@@ -1,3 +1,5 @@
+// привет
+
 int t1 = 14;
 int t2 = 12;
 void setup() {
