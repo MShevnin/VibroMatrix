@@ -325,12 +325,12 @@ public final class DeviceControlActivity extends BaseActivity {
             }
 
             // checksum
-            if (checkSum) {
-                commandString += Utils.calcModulo256(commandString);
-            }
+            //if (checkSum) {
+            //    commandString += Utils.calcModulo256(commandString);
+            //}
 
             byte[] command = (hexMode ? Utils.toHex(commandString) : commandString.getBytes());
-            if (command_ending != null) command = Utils.concat(command, command_ending.getBytes());
+            //if (command_ending != null) command = Utils.concat(command, command_ending.getBytes());
             if (isConnected()) {
                 connector.write(command);
                 appendLog(commandString, hexMode, true, needClean);

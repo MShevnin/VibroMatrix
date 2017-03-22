@@ -3,6 +3,7 @@
     <string-array name="commands_mode">
         <item>ASCII</item>
         <item>HEX</item>
+        <item>POINTS</item>
     </string-array>
 
     <string-array name="checksum_mode">

@@ -52,7 +52,7 @@ public class Utils {
      */
     public static byte[] toHex(String hex) {
         int len = hex.length();
-        byte[] result = new byte[len];
+        byte[] result = new byte[len / 2];
         try {
             int index = 0;
             for (int i = 0; i < len; i += 2) {

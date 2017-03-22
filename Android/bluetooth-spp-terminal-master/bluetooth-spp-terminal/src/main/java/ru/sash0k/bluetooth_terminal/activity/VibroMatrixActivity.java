@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 
+import ru.sash0k.bluetooth_terminal.Matrix;
 import ru.sash0k.bluetooth_terminal.R;
 
 public class VibroMatrixActivity extends Activity {
+
+    public Matrix matrixValue = new Matrix();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +34,41 @@ public class VibroMatrixActivity extends Activity {
 
             Paint fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+            Paint grayPaint = new Paint();
+            grayPaint.setColor(Color.GRAY);
+
             Paint greenPaint = new Paint();
             greenPaint.setColor(Color.GREEN);
+
+            Paint redPaint = new Paint();
+            redPaint.setColor(Color.RED);
 
             int fontSize = 30;
 
             int matrixSize = canvas.getWidth();
 
-            canvas.drawRect(0, 0, matrixSize, matrixSize,  greenPaint);
+            Matrix matrix = ((VibroMatrixActivity) getContext()).matrixValue;
+            matrix.clear();
+            matrix.setValue(2,2, (byte) 1);
+            matrix.setValue(2,3, (byte) 2);
 
+            for(int i=0; i<8; i++){
+                for(int j=0; j<8; j++){
+                    switch (matrix.getValue(i, j)){
+                        case 0:
+                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, grayPaint);
+                            break;
+                        case 1:
+                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, redPaint);
+                            break;
+                        case 2:
+                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, greenPaint);
+                            break;
+                    }
+                }
+            }
 
             fontPaint.setTextSize(fontSize);
-            fontPaint.setStyle(Paint.Style.STROKE);
 
             canvas.drawText(String.valueOf(canvas.getWidth()), 50, 50, fontPaint);
         }
