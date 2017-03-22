@@ -213,6 +213,10 @@ public final class DeviceControlActivity extends BaseActivity {
                 final Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.menu_vibro_matrix:
+                final Intent intent2 = new Intent(this, VibroMatrixActivity.class);
+                startActivity(intent2);
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

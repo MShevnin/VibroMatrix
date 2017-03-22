@@ -49,4 +49,5 @@
 
     <string name="need_clean">Clear previous command</string>
     <string name="need_clean_summary">Cleanup command view after sending</string>
+    <string name="title_activity_vibro_matrix">VibroMatrixActivity</string>
 </resources>
