@@ -10,16 +10,29 @@ import android.view.View;
 
 import ru.sash0k.bluetooth_terminal.Matrix;
 import ru.sash0k.bluetooth_terminal.R;
+import ru.sash0k.bluetooth_terminal.bluetooth.VibroMotorsSender;
 
 public class VibroMatrixActivity extends Activity {
 
     public Matrix matrixValue = new Matrix();
+    private DrawView view;
+    static VibroMotorsSender task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_vibro_matrix);
-        setContentView(new DrawView(this));
+        view = new DrawView(this);
+        setContentView(view);
+
+        matrixValue.clear();
+
+        task = new VibroMotorsSender("Test", this);
+        task.execute((Void) null);
+    }
+
+    public void Invalidate() {
+        view.invalidate();
     }
 
     class DrawView extends View {
@@ -27,6 +40,7 @@ public class VibroMatrixActivity extends Activity {
         public DrawView(Context context) {
             super(context);
         }
+
 
         @Override
         protected void onDraw(Canvas canvas) {
@@ -43,28 +57,27 @@ public class VibroMatrixActivity extends Activity {
             Paint redPaint = new Paint();
             redPaint.setColor(Color.RED);
 
+            Paint curPaint = grayPaint;
             int fontSize = 30;
 
             int matrixSize = canvas.getWidth();
 
             Matrix matrix = ((VibroMatrixActivity) getContext()).matrixValue;
-            matrix.clear();
-            matrix.setValue(2,2, (byte) 1);
-            matrix.setValue(2,3, (byte) 2);
 
             for(int i=0; i<8; i++){
                 for(int j=0; j<8; j++){
                     switch (matrix.getValue(i, j)){
                         case 0:
-                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, grayPaint);
+                            curPaint = grayPaint;
                             break;
                         case 1:
-                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, redPaint);
+                            curPaint = redPaint;
                             break;
                         case 2:
-                            canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, greenPaint);
+                            curPaint = greenPaint;
                             break;
                     }
+                    canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, curPaint);
                 }
             }
 

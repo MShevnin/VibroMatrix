@@ -6,4 +6,6 @@
     android:layout_height="match_parent"
     tools:context="ru.sash0k.bluetooth_terminal.activity.VibroMatrixActivity">
 
+
+
 </android.support.constraint.ConstraintLayout>
