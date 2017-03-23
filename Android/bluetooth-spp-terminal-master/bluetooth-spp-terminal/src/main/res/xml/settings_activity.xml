@@ -32,6 +32,18 @@
             android:key="@string/pref_need_clean"
             android:summary="@string/need_clean_summary"
             android:title="@string/need_clean" />
+        <EditTextPreference
+            android:defaultValue="200"
+            android:key="edit_text_point_delay"
+            android:summary="диапазон 10мс - 255мс"
+            android:singleLine="true"
+            android:title="Время вибрации точки (мс)" />
+        <EditTextPreference
+            android:defaultValue="500"
+            android:key="edit_text_leter_delay"
+            android:summary="диапазон 50мс - 2000мс"
+            android:singleLine="true"
+            android:title="Задержка между буквами (мс)" />
     </PreferenceCategory>
 
     <!-- История команд -->

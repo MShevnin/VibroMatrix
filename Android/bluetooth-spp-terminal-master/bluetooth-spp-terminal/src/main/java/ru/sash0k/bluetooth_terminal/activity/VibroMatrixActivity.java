@@ -4,19 +4,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 
 import ru.sash0k.bluetooth_terminal.Matrix;
-import ru.sash0k.bluetooth_terminal.R;
-import ru.sash0k.bluetooth_terminal.bluetooth.VibroMotorsSender;
+import ru.sash0k.bluetooth_terminal.VibroMatrix.VibroMotorsSenderTask;
 
 public class VibroMatrixActivity extends Activity {
 
     public Matrix matrixValue = new Matrix();
     private DrawView view;
-    static VibroMotorsSender task;
+    static VibroMotorsSenderTask task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,25 @@ public class VibroMatrixActivity extends Activity {
 
         matrixValue.clear();
 
-        task = new VibroMotorsSender("Test", this);
+        task = new VibroMotorsSenderTask("Test", this);
         task.execute((Void) null);
+    }
+
+    @Override
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        final VibroMotorsSenderTask curTask = task;//The final modifier indicates that the value of this field cannot change.
+
+        if (curTask !=null && task.getStatus()== AsyncTask.Status.RUNNING) {
+
+            outState.putBoolean("mCancelled", true);
+            curTask.cancel(true);
+
+        } else {
+            outState.putBoolean("mCancelled", false);
+        }
     }
 
     public void Invalidate() {
@@ -77,7 +94,7 @@ public class VibroMatrixActivity extends Activity {
                             curPaint = greenPaint;
                             break;
                     }
-                    canvas.drawCircle(i*matrixSize/8+matrixSize/16, j*matrixSize/8+matrixSize/16, matrixSize/17, curPaint);
+                    canvas.drawCircle(i*matrixSize/8+matrixSize/16, matrixSize - j*matrixSize/8+matrixSize/16, matrixSize/17, curPaint);
                 }
             }
 

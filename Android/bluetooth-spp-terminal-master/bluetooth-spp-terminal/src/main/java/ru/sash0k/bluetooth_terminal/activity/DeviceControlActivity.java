@@ -53,7 +53,7 @@ public final class DeviceControlActivity extends BaseActivity {
     private EditText commandEditText;
 
     // Настройки приложения
-    private boolean hexMode, checkSum, needClean;
+    private boolean hexMode, checkSum, needClean, pointsMode;
     private boolean show_timings, show_direction;
     private String command_ending;
     private String deviceName;
@@ -232,6 +232,8 @@ public final class DeviceControlActivity extends BaseActivity {
         // hex mode
         final String mode = Utils.getPrefence(this, getString(R.string.pref_commands_mode));
         this.hexMode = "HEX".equals(mode);
+        this.pointsMode = "POINTS".equals(mode);
+
         if (hexMode) {
             commandEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
             commandEditText.setFilters(new InputFilter[]{new Utils.InputFilterHex()});
@@ -317,6 +319,12 @@ public final class DeviceControlActivity extends BaseActivity {
         if (commandEditText != null) {
             String commandString = commandEditText.getText().toString();
             if (commandString.isEmpty()) return;
+
+            if(pointsMode){
+
+
+                return;
+            }
 
             // Дополнение команд в hex
             if (hexMode && (commandString.length() % 2 == 1)) {
