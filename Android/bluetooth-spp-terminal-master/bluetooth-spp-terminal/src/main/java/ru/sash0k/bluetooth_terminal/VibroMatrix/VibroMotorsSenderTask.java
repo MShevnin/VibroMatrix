@@ -16,7 +16,6 @@ import ru.sash0k.bluetooth_terminal.activity.VibroMatrixActivity;
 
 
 public class VibroMotorsSenderTask extends AsyncTask<Void, Void, Void>{
-    private final Object mLock = new Object();
     String message;
     Activity activity;
 

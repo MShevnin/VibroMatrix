@@ -26,10 +26,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ru.sash0k.bluetooth_terminal.DeviceData;
+import ru.sash0k.bluetooth_terminal.Matrix;
 import ru.sash0k.bluetooth_terminal.R;
 import ru.sash0k.bluetooth_terminal.Utils;
+import ru.sash0k.bluetooth_terminal.VibroMatrix.VibroMotorsSenderTask;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceConnector;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceListActivity;
+import ru.sash0k.bluetooth_terminal.view.DrawMatrixView;
 
 public final class DeviceControlActivity extends BaseActivity {
     private static final String DEVICE_NAME = "DEVICE_NAME";
@@ -58,6 +61,10 @@ public final class DeviceControlActivity extends BaseActivity {
     private String command_ending;
     private String deviceName;
 
+    public Matrix matrixValue = new Matrix();
+    private DrawMatrixView drawMatrixView;
+    private VibroMotorsSenderTask task;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +88,9 @@ public final class DeviceControlActivity extends BaseActivity {
         this.logTextView = (TextView) findViewById(R.id.log_textview);
         this.logTextView.setMovementMethod(new ScrollingMovementMethod());
         this.logTextView.setText(Html.fromHtml(logHtml.toString()));
+
+        matrixValue.clear();
+        this.drawMatrixView = (DrawMatrixView) findViewById(R.id.drawMatrixView);
 
         this.commandEditText = (EditText) findViewById(R.id.command_edittext);
         // soft-keyboard send button
