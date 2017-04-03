@@ -32,15 +32,10 @@
     <TextView
         android:id="@+id/log_textview"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:clickable="false"
         android:enabled="true"
         android:scrollbars="vertical"
         android:textColor="@android:color/white"/>
-
-    <ru.sash0k.bluetooth_terminal.view.DrawMatrixView
-        android:id="@+id/drawMatrixView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
 
 </LinearLayout>

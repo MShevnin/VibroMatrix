@@ -46,7 +46,7 @@ public class PathSymbolGenerator {
 
     static public SymbolPoint[] getPath(char leter){
         for(int i = 0; i < symbols.length; i++){
-            if(symbols[i].getLeter() == leter)
+            if(Character.toUpperCase(symbols[i].getLeter()) == Character.toUpperCase(leter))
                 return symbols[i].getPoint();
         }
         return null;

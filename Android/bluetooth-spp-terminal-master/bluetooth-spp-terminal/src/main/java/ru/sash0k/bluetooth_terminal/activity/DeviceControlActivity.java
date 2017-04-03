@@ -23,16 +23,23 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ru.sash0k.bluetooth_terminal.DeviceData;
 import ru.sash0k.bluetooth_terminal.Matrix;
 import ru.sash0k.bluetooth_terminal.R;
 import ru.sash0k.bluetooth_terminal.Utils;
+import ru.sash0k.bluetooth_terminal.VibroMatrix.PathSymbolGenerator;
+import ru.sash0k.bluetooth_terminal.VibroMatrix.SymbolPoint;
 import ru.sash0k.bluetooth_terminal.VibroMatrix.VibroMotorsSenderTask;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceConnector;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceListActivity;
 import ru.sash0k.bluetooth_terminal.view.DrawMatrixView;
+
+import static android.R.id.list;
+import static java.lang.Thread.sleep;
 
 public final class DeviceControlActivity extends BaseActivity {
     private static final String DEVICE_NAME = "DEVICE_NAME";
@@ -57,6 +64,7 @@ public final class DeviceControlActivity extends BaseActivity {
 
     // Настройки приложения
     private boolean hexMode, checkSum, needClean, pointsMode;
+    private int pointDelay, leterDelay;
     private boolean show_timings, show_direction;
     private String command_ending;
     private String deviceName;
@@ -90,7 +98,7 @@ public final class DeviceControlActivity extends BaseActivity {
         this.logTextView.setText(Html.fromHtml(logHtml.toString()));
 
         matrixValue.clear();
-        this.drawMatrixView = (DrawMatrixView) findViewById(R.id.drawMatrixView);
+        //this.drawMatrixView = (DrawMatrixView) findViewById(R.id.drawMatrixView);
 
         this.commandEditText = (EditText) findViewById(R.id.command_edittext);
         // soft-keyboard send button
@@ -244,6 +252,7 @@ public final class DeviceControlActivity extends BaseActivity {
         this.hexMode = "HEX".equals(mode);
         this.pointsMode = "POINTS".equals(mode);
 
+
         if (hexMode) {
             commandEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
             commandEditText.setFilters(new InputFilter[]{new Utils.InputFilterHex()});
@@ -252,6 +261,11 @@ public final class DeviceControlActivity extends BaseActivity {
             commandEditText.setFilters(new InputFilter[]{});
         }
 
+        final String pointDelayString = Utils.getPrefence(this, "edit_text_point_delay");
+        pointDelay = Integer.parseInt(pointDelayString);
+
+        final String leterDelayString = Utils.getPrefence(this, "edit_text_leter_delay");
+        leterDelay = Integer.parseInt(leterDelayString);
         // checksum
         final String checkSum = Utils.getPrefence(this, getString(R.string.pref_checksum_mode));
         this.checkSum = "Modulo 256".equals(checkSum);
@@ -331,8 +345,30 @@ public final class DeviceControlActivity extends BaseActivity {
             if (commandString.isEmpty()) return;
 
             if(pointsMode){
-
-
+                List<Byte> arrays = new ArrayList<Byte>();
+                for(int i=0; i<commandString.length(); i++) {
+                    appendLog("Символ:" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
+                    SymbolPoint[] symbolPoints = PathSymbolGenerator.getPath(commandString.charAt(i));
+                    for(int g=0; g<symbolPoints.length; g++) {
+                        if (isConnected()) {
+                            //connector.write(new byte[]{symbolPoints[g].getX(), symbolPoints[g].getY(), (byte) (pointDelay/10)});
+                            arrays.add(symbolPoints[g].getX());
+                            arrays.add(symbolPoints[g].getY());
+                            arrays.add( (byte) (pointDelay/10));
+                            appendLog("x:"+symbolPoints[g].getX()+", y:"+symbolPoints[g].getY()+" ", hexMode, true, needClean);
+                        }
+                    }
+                    appendLog("Конец символа" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
+                    //connector.write(new byte[]{100, 100, (byte) (leterDelay / 10)});
+                    arrays.add((byte) 100);
+                    arrays.add((byte) 100);
+                    arrays.add( (byte) (leterDelay / 10));
+                }
+                byte[] arr = new byte[arrays.size()];
+                for(int i = 0; i < arrays.size(); i++) {
+                    arr[i] = arrays.get(i);
+                }
+                connector.write(arr);
                 return;
             }
 
