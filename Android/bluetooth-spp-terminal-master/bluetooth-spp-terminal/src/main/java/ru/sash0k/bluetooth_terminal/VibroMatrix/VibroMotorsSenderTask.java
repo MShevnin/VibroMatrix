@@ -15,7 +15,7 @@ import ru.sash0k.bluetooth_terminal.activity.VibroMatrixActivity;
  */
 
 
-public class VibroMotorsSenderTask extends AsyncTask<Void, Void, Void>{
+public class VibroMotorsSenderTask extends AsyncTask<Void, SymbolPoint, Void>{
     String message;
     Activity activity;
 
@@ -25,9 +25,11 @@ public class VibroMotorsSenderTask extends AsyncTask<Void, Void, Void>{
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
+    protected void onProgressUpdate(SymbolPoint... values) {
         super.onProgressUpdate(values);
 
+        ((VibroMatrixActivity) activity).matrixValue.setValue(values[0].getX(), values[0].getY(), (byte) 1);
+        ((VibroMatrixActivity) activity).Invalidate();
 //        Random r = new Random();
 //        ((VibroMatrixActivity) activity).matrixValue.setValue(r.nextInt(8), r.nextInt(8), (byte) r.nextInt(3));
 //        ((VibroMatrixActivity) activity).Invalidate();
@@ -40,14 +42,12 @@ public class VibroMotorsSenderTask extends AsyncTask<Void, Void, Void>{
             try {
                 Thread.sleep(100);
 
-//                publishProgress();
-                final SymbolPoint point = points[i];
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        ((VibroMatrixActivity) activity).matrixValue.setValue(point.getX(), point.getY(), (byte) 1);
-                        ((VibroMatrixActivity) activity).Invalidate();
-                    }
-                });
+                publishProgress(points[i]);
+//                activity.runOnUiThread(new Runnable() {
+//                    public void run() {
+//
+//                    }
+//                });
             } catch (InterruptedException e) {
                 return null;
             }
