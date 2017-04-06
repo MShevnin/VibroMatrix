@@ -350,12 +350,23 @@ public class DeviceConnector {
         public void writeData(byte[] chunk) {
 
             try {
-                mmOutStream.write(chunk);
-                mmOutStream.flush();
+                byte x, y, t;
+                for(int i = 0; i < chunk.length; i+=3) {
+                    x = chunk[i];
+                    y = chunk[i+1];
+                    t = chunk[i+2];
+                    //mmOutStream.write(chunk);
+                    mmOutStream.write(new byte[]{x, y, t});
+                    mmOutStream.flush();
+                    Thread.sleep(11*t);
+                    //mmOutStream.wait(t*10);
+                }
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(DeviceControlActivity.MESSAGE_WRITE, -1, -1, chunk).sendToTarget();
             } catch (IOException e) {
                 if (D) Log.e(TAG, "Exception during write", e);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         // ==========================================================================
