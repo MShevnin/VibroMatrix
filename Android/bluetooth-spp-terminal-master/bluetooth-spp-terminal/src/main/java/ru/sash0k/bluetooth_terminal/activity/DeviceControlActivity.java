@@ -98,7 +98,7 @@ public final class DeviceControlActivity extends BaseActivity {
         this.logTextView.setText(Html.fromHtml(logHtml.toString()));
 
         matrixValue.clear();
-        //this.drawMatrixView = (DrawMatrixView) findViewById(R.id.drawMatrixView);
+        this.drawMatrixView = (DrawMatrixView) findViewById(R.id.draw_matrix_view);
 
         this.commandEditText = (EditText) findViewById(R.id.command_edittext);
         // soft-keyboard send button

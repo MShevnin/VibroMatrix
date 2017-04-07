@@ -48,7 +48,8 @@ public class DrawMatrixView extends View {
         Paint curPaint = grayPaint;
         int fontSize = 30;
 
-        int matrixSize = canvas.getWidth();
+        int matrixSize = canvas.getHeight();
+        int width = canvas.getWidth();
 
         Matrix matrix = ((DeviceControlActivity) getContext()).matrixValue;
 
@@ -65,7 +66,7 @@ public class DrawMatrixView extends View {
                         curPaint = greenPaint;
                         break;
                 }
-                canvas.drawCircle(i * matrixSize / 8 + matrixSize / 16, matrixSize - j * matrixSize / 8 + matrixSize / 16, matrixSize / 17, curPaint);
+                canvas.drawCircle((width - matrixSize)/2 +  i * matrixSize / 8 + matrixSize / 16, matrixSize - j * matrixSize / 8 + matrixSize / 16, matrixSize / 17, curPaint);
             }
         }
 
