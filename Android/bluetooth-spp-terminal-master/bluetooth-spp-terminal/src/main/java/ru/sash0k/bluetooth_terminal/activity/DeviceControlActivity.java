@@ -350,7 +350,8 @@ public final class DeviceControlActivity extends BaseActivity {
                     appendLog("Символ:" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
                     SymbolPoint[] symbolPoints = PathSymbolGenerator.getPath(commandString.charAt(i));
                     for(int g=0; g<symbolPoints.length; g++) {
-                        if (isConnected()) {
+                        //if (isConnected())
+                        {
                             //connector.write(new byte[]{symbolPoints[g].getX(), symbolPoints[g].getY(), (byte) (pointDelay/10)});
                             arrays.add(symbolPoints[g].getX());
                             arrays.add(symbolPoints[g].getY());
@@ -368,7 +369,10 @@ public final class DeviceControlActivity extends BaseActivity {
                 for(int i = 0; i < arrays.size(); i++) {
                     arr[i] = arrays.get(i);
                 }
-                connector.write(arr);
+
+                VibroMotorsSenderTask task = new VibroMotorsSenderTask(arr, this, connector);
+                task.execute();
+                //connector.write(arr);
                 return;
             }
 
@@ -446,6 +450,10 @@ public final class DeviceControlActivity extends BaseActivity {
     void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
         getActionBar().setSubtitle(deviceName);
+    }
+
+    public void Invalidate() {
+        drawMatrixView.invalidate();
     }
     // ==========================================================================
 

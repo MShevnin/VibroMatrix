@@ -60,13 +60,14 @@ public class DrawMatrixView extends View {
                         curPaint = grayPaint;
                         break;
                     case 1:
-                        curPaint = redPaint;
-                        break;
-                    case 2:
                         curPaint = greenPaint;
                         break;
+                    case 2:
+                        curPaint = redPaint;
+                        break;
                 }
-                canvas.drawCircle((width - matrixSize)/2 +  i * matrixSize / 8 + matrixSize / 16, matrixSize - j * matrixSize / 8 + matrixSize / 16, matrixSize / 17, curPaint);
+                canvas.drawCircle((width - matrixSize)/2 +  i * matrixSize / 8 + matrixSize / 16,
+                        matrixSize - j * matrixSize / 8 - matrixSize / 16, matrixSize / 17, curPaint);
             }
         }
 

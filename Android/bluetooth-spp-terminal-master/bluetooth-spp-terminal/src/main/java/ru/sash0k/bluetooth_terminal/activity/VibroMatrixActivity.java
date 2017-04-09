@@ -23,8 +23,8 @@ public class VibroMatrixActivity extends Activity {
 
         matrixValue.clear();
 
-        task = new VibroMotorsSenderTask("Test", this);
-        task.execute((Void) null);
+//        task = new VibroMotorsSenderTask("Test", this, getSystemService());
+//        task.execute((Void) null);
     }
 
     @Override

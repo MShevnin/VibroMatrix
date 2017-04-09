@@ -6,6 +6,14 @@ package ru.sash0k.bluetooth_terminal.VibroMatrix;
 
 public class SymbolPoint{
     byte x, y;
+    byte color = 0;
+
+    public SymbolPoint(int xx, int yy, int c)
+    {
+        x = (byte) xx;
+        y = (byte) yy;
+        color = (byte) c;
+    }
 
     public SymbolPoint(int xx, int yy)
     {

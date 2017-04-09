@@ -41,10 +41,9 @@
     <ru.sash0k.bluetooth_terminal.view.DrawMatrixView
         android:id="@+id/draw_matrix_view"
         android:layout_width="match_parent"
-        android:layout_height="237dp"
+        android:layout_height="241dp"
         android:clickable="false"
         android:enabled="true"
-        android:scrollbars="vertical"
         android:textColor="@android:color/white"/>
 
 </LinearLayout>
