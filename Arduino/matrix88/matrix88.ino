@@ -1,7 +1,7 @@
 #include<SoftwareSerial.h>
 SoftwareSerial bluetooth(0, 1);
-int pinX[8] = {14, 15, 16, 17, 18, 19, 3, 2}; //+
-int pinY[8]= {12, 11, 10, 9, 8, 7, 6, 5}; //-
+int pinX[8] = {15, 16, 17, 18, 19, 3}; //+
+int pinY[8]= {12, 11, 10, 9, 8, 7, 6}; //-
 
 void delay2(unsigned long ms)
 {
@@ -17,33 +17,39 @@ void delay2(unsigned long ms)
 
 void setup() {
   bluetooth.begin(9600);  
-  for( int i=0; i<8; i++){
-    pinMode (pinX[i], OUTPUT);
-    pinMode (pinY[i], OUTPUT);  
+  for( int x=0; x<6; x++){
+    pinMode (pinX[x], OUTPUT);
+    digitalWrite (pinX[x], HIGH);
+  }
 
-    digitalWrite (pinX[i], HIGH);
-    digitalWrite (pinY[i], LOW);
+  for( int y=0; y<7; y++){
+    pinMode (pinY[y], OUTPUT);  
+    digitalWrite (pinY[y], LOW);
   }
   
-  for(int j = 0; j < 8; j++){
-  for( int i=0; i<8; i++){
-    drawPoint(i, j, true);
+  for(int y = 0; y < 7; y++){
+    for( int x=0; x<6; x++){
+      drawPoint(x, y, true);
+      delay(500);
+      drawPoint(x, y, false);
+      delay(100);
+    }
     delay(1000);
-    drawPoint(i, j, false);
-    delay(100);
-  }
-  delay(1000);
   }
 }
 
 void drawPoint(int x, int y, bool power){
   if( power == true ){
-    digitalWrite (pinX[x+1], LOW);
-    digitalWrite (pinY[y], HIGH);  
+    if((x >= 0)&&(x < 6)&&(y >= 0)&&(y < 7)){
+      digitalWrite (pinX[x], LOW);
+      digitalWrite (pinY[y], HIGH);  
+    }
   }
   else{
-    digitalWrite (pinX[x+1], HIGH);
-    digitalWrite (pinY[y], LOW);
+    if((x >= 0)&&(x < 6)&&(y >= 0)&&(y < 7)){
+      digitalWrite (pinX[x], HIGH);
+      digitalWrite (pinY[y], LOW);
+    }
   }
 }
 
