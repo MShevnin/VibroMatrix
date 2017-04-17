@@ -48,8 +48,8 @@ public class VibroMotorsSenderTask extends AsyncTask<Void, SymbolPoint, Void>{
         byte x, y, t;
         byte oldx = -1, oldy = -1;
         for(int i = 0; i < message.length; i+=3) {
-            x = message[i];
-            y = message[i + 1];
+            x = (byte) (message[i] - 1);
+            y = (byte) (message[i + 1] - 1);
             t = message[i + 2];
 
             try {
@@ -65,7 +65,7 @@ public class VibroMotorsSenderTask extends AsyncTask<Void, SymbolPoint, Void>{
                     oldy = -1;
                 }
                 if(connector != null)
-                    connector.write(new byte[]{x, (byte) (8 - y), t});
+                    connector.write(new byte[]{x, (byte) (6 - y), t});
                 Thread.sleep(11*t);
             } catch (InterruptedException e) {
                 return null;

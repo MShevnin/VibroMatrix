@@ -53,8 +53,8 @@ public class DrawMatrixView extends View {
 
         Matrix matrix = ((DeviceControlActivity) getContext()).matrixValue;
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
                 switch (matrix.getValue(i, j)) {
                     case 0:
                         curPaint = grayPaint;
@@ -66,8 +66,8 @@ public class DrawMatrixView extends View {
                         curPaint = redPaint;
                         break;
                 }
-                canvas.drawCircle((width - matrixSize)/2 +  i * matrixSize / 8 + matrixSize / 16,
-                        matrixSize - j * matrixSize / 8 - matrixSize / 16, matrixSize / 17, curPaint);
+                canvas.drawCircle((width - matrixSize)/2 +  i * matrixSize / 6 + matrixSize / 12,
+                        matrixSize - j * matrixSize / 7 - matrixSize / 14, matrixSize / 17, curPaint);
             }
         }
 

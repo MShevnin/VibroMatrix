@@ -349,29 +349,33 @@ public final class DeviceControlActivity extends BaseActivity {
                 for(int i=0; i<commandString.length(); i++) {
                     appendLog("Символ:" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
                     SymbolPoint[] symbolPoints = PathSymbolGenerator.getPath(commandString.charAt(i));
-                    for(int g=0; g<symbolPoints.length; g++) {
-                        //if (isConnected())
-                        {
-                            //connector.write(new byte[]{symbolPoints[g].getX(), symbolPoints[g].getY(), (byte) (pointDelay/10)});
-                            arrays.add(symbolPoints[g].getX());
-                            arrays.add(symbolPoints[g].getY());
-                            arrays.add( (byte) (pointDelay/10));
-                            appendLog("x:"+symbolPoints[g].getX()+", y:"+symbolPoints[g].getY()+" ", hexMode, true, needClean);
+                    if(symbolPoints != null) {
+                        for (int g = 0; g < symbolPoints.length; g++) {
+                            //if (isConnected())
+                            {
+                                //connector.write(new byte[]{symbolPoints[g].getX(), symbolPoints[g].getY(), (byte) (pointDelay/10)});
+                                arrays.add(symbolPoints[g].getX());
+                                arrays.add(symbolPoints[g].getY());
+                                arrays.add((byte) (pointDelay / 10));
+                                //appendLog("x:"+symbolPoints[g].getX()+", y:"+symbolPoints[g].getY()+" ", hexMode, true, needClean);
+                            }
                         }
+                        //appendLog("Конец символа" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
+                        //connector.write(new byte[]{100, 100, (byte) (leterDelay / 10)});
+                        arrays.add((byte) 101);
+                        arrays.add((byte) 101);
+                        arrays.add((byte) (leterDelay / 10));
                     }
-                    appendLog("Конец символа" + commandString.charAt(i) +"<br>", hexMode, true, needClean);
-                    //connector.write(new byte[]{100, 100, (byte) (leterDelay / 10)});
-                    arrays.add((byte) 100);
-                    arrays.add((byte) 100);
-                    arrays.add( (byte) (leterDelay / 10));
                 }
-                byte[] arr = new byte[arrays.size()];
-                for(int i = 0; i < arrays.size(); i++) {
-                    arr[i] = arrays.get(i);
-                }
+                if(arrays.size() > 0) {
+                    byte[] arr = new byte[arrays.size()];
+                    for (int i = 0; i < arrays.size(); i++) {
+                        arr[i] = arrays.get(i);
+                    }
 
-                VibroMotorsSenderTask task = new VibroMotorsSenderTask(arr, this, connector);
-                task.execute();
+                    VibroMotorsSenderTask task = new VibroMotorsSenderTask(arr, this, connector);
+                    task.execute();
+                }
                 //connector.write(arr);
                 return;
             }
