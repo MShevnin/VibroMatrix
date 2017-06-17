@@ -24,7 +24,7 @@ byte number9[16][2] = {{3, 2}, {2, 2}, {1, 2}, {0, 2}, {0, 1}, {0, 0}, {1, 0}, {
 const byte PointMode = 0;
 const byte SledMode = 1;
 const byte FullSymbolMode = 2;
-const int analog = A3;
+const int analog = A0;
 byte mode = SledMode; 
 int sensorValue = 0;        
 int sc = 0;
@@ -184,6 +184,12 @@ void scor()
   delay(100);
  }
 }
+//void PrintPoint(int x1, int y1, int t){
+  //bluetooth.read(x1);
+ // bluetooth.read(y1);
+ // bluetooth.read(t);
+  
+//}
 
 void PrintXY(int x, int y)
 {
