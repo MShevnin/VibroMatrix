@@ -4,8 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -21,6 +24,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TG;
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,12 +44,18 @@ import ru.sash0k.bluetooth_terminal.VibroMatrix.SymbolPoint;
 import ru.sash0k.bluetooth_terminal.VibroMatrix.VibroMotorsSenderTask;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceConnector;
 import ru.sash0k.bluetooth_terminal.bluetooth.DeviceListActivity;
+import ru.sash0k.bluetooth_terminal.mobi.core.ApiClient;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.BaseHandler;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.GetStateHandler;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.UpdatesHandler;
+import ru.sash0k.bluetooth_terminal.mobi.model.Enums;
+import ru.sash0k.bluetooth_terminal.mobi.model.holder.DataHolder;
 import ru.sash0k.bluetooth_terminal.view.DrawMatrixView;
 
 import static android.R.id.list;
 import static java.lang.Thread.sleep;
 
-public final class DeviceControlActivity extends BaseActivity {
+public final class DeviceControlActivity extends BaseActivity implements ApiClient.OnApiResultHandler {
     private static final String DEVICE_NAME = "DEVICE_NAME";
     private static final String LOG = "LOG";
 
@@ -127,6 +141,26 @@ public final class DeviceControlActivity extends BaseActivity {
                 return false;
             }
         });
+
+        TG.setUpdatesHandler(new UpdatesHandler(this));
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String path = Environment.getExternalStorageDirectory() + File.separator + "Android" + File.separator + "data" + File.separator + getPackageName();
+            TG.setDir(path);
+            DataHolder.setCachePath(path);
+        }
+        DataHolder.setContext(this);
+
+        TG.setDir(getApplicationContext().getCacheDir().getAbsolutePath());
+        new ApiClient<>(new TdApi.AuthSetPhoneNumber("+79127617110"), new GetStateHandler(), this).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+//                Client client = TG.getClientInstance();
+//                client.send(new TdApi.AuthSetPhoneNumber("+79127617110"), new Client.ResultHandler() {
+//                    @Override
+//                    public void onResult(TdApi.TLObject object) {
+//                        int i = 0;
+//                    }
+//                });
+
+
     }
     // ==========================================================================
 
@@ -458,6 +492,16 @@ public final class DeviceControlActivity extends BaseActivity {
 
     public void Invalidate() {
         drawMatrixView.invalidate();
+    }
+
+    @Override
+    public void onApiResult(BaseHandler output) {
+        if (output.getHandlerId() == GetStateHandler.HANDLER_ID) {
+            GetStateHandler handler = (GetStateHandler) output;
+            if (handler.getResponse() == Enums.StatesEnum.WaitSetCode) {
+            }
+        }
+
     }
     // ==========================================================================
 

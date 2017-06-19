@@ -4,16 +4,29 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TG;
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.io.File;
 
 import ru.sash0k.bluetooth_terminal.R;
 import ru.sash0k.bluetooth_terminal.Utils;
+import ru.sash0k.bluetooth_terminal.mobi.core.ApiClient;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.BaseHandler;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.GetStateHandler;
+import ru.sash0k.bluetooth_terminal.mobi.core.handlers.UpdatesHandler;
+import ru.sash0k.bluetooth_terminal.mobi.model.holder.DataHolder;
 
 /**
  * Общий базовый класс. Инициализация BT-адаптера
  * Created by sash0k on 09.12.13.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity  {
 
     // Intent request codes
     static final int REQUEST_CONNECT_DEVICE = 1;
@@ -27,6 +40,7 @@ public abstract class BaseActivity extends Activity {
     public static final int MESSAGE_TOAST = 5;
 
     BluetoothAdapter btAdapter;
+    Client client;
 
     private static final String SAVED_PENDING_REQUEST_ENABLE_BT = "PENDING_REQUEST_ENABLE_BT";
     // do not resend request to enable Bluetooth
@@ -49,6 +63,44 @@ public abstract class BaseActivity extends Activity {
             showAlertDialog(no_bluetooth);
             Utils.log(no_bluetooth);
         }
+
+      /*  TG.setDir(getApplicationContext().getCacheDir().getAbsolutePath());
+        client = TG.getClientInstance();
+
+        TdApi.AuthSetPhoneNumber phoneMessage = new TdApi.AuthSetPhoneNumber("+79127617110");
+        client.send(phoneMessage, new Client.ResultHandler() {
+            @Override
+            protected void finalize() throws Throwable {
+                super.finalize();
+            }
+
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                String code = "94176"; // received code from Telegram
+
+                TdApi.AuthSetCode codeMessage = new TdApi.AuthSetCode(code);
+                client.send(codeMessage, new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+
+                    }
+                });
+
+
+            }
+        });*/
+
+        //                TdApi.InputMessageContent msg = new TdApi.InputMessageText("Hello!");
+//                //"https://t.me/joinchat/AAAAAEKcBWnrI6zWx5wx_w"
+//
+//                TdApi.SendMessage request = new TdApi.SendMessage(, 0, false, false, null, msg);
+//                client.send(request, new Client.ResultHandler() {
+//                    @Override
+//                    public void onResult(TdApi.TLObject object) {
+//
+//                    }
+//                });
+
     }
     // ==========================================================================
 
@@ -63,6 +115,8 @@ public abstract class BaseActivity extends Activity {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
+
+
     }
     // ==========================================================================
 
@@ -113,5 +167,5 @@ public abstract class BaseActivity extends Activity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-    // ==========================================================================
+
 }

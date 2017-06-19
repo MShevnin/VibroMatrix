@@ -26,4 +26,6 @@ android {
 }
 dependencies {
     compile 'com.android.support.constraint:constraint-layout:+'
+    compile project(path: ':libtd')
+    compile project(path: ':libtd')
 }

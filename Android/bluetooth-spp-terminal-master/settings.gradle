@@ -1,1 +1,1 @@
-include ':bluetooth-spp-terminal'
+include ':bluetooth-spp-terminal', ':libtd'
